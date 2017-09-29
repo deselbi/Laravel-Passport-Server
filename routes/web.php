@@ -18,3 +18,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/auth/clients', "OAuthController@createClient");
+Route::post('/auth/issueToken', "OAuthController@issueToken");
