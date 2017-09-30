@@ -8,6 +8,7 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Psr\Http\Message\ServerRequestInterface;
 
+use Facades\App\Services\OAuthService;
 
 class OAuthController extends Controller
 {
@@ -39,14 +40,16 @@ class OAuthController extends Controller
     public function createClient(Request $request)
     {
 
-        $this->clients = new ClientRepository();
-
         $this->validate($request, [
             'name' => 'required|max:255',
             'user_id' => 'required|integer',
             'redirect' => 'required|url',
 
         ]);
+
+        return OAuthService::createClient($request->name, $request->user_id, $request->redirect);
+
+        $this->clients = new ClientRepository();
 
         return $this->clients->create(
             $request->user_id, $request->name, $request->redirect
@@ -57,6 +60,9 @@ class OAuthController extends Controller
 
     public function issueToken(ServerRequestInterface $request)
     {
+
+        return OAuthService::issueToken($request);
+
 
         return $this->accessTokenController->issueToken($request);
     }
