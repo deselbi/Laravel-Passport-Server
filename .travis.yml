@@ -33,6 +33,7 @@ install:
 before_script:
   - cp .env.travis .env
   - mysql -e 'create database testing;'
-
+  - php artisan migrate
+  - php artisan passport:install
 
 script: vendor/bin/phpunit -c phpunit-travis.xml
